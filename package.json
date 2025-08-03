@@ -1,7 +1,7 @@
 {
   "name": "taiwan-bank-rate",
   "version": "1.0.0",
-  "description": "台灣銀行匯率查詢 Library",
+  "description": "Taiwan Bank Exchange Rate Query Library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -25,7 +25,7 @@
     "currency",
     "api"
   ],
-  "author": "Your Name",
+  "author": "smallptsai",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.8",
@@ -47,10 +47,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/taiwan-bank-rate.git"
+    "url": "https://github.com/SmallpTsai/taiwan-bank-rate.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/taiwan-bank-rate/issues"
+    "url": "https://github.com/SmallpTsai/taiwan-bank-rate/issues"
   },
-  "homepage": "https://github.com/your-username/taiwan-bank-rate#readme"
+  "homepage": "https://github.com/SmallpTsai/taiwan-bank-rate#readme"
 } 

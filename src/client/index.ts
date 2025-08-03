@@ -16,9 +16,9 @@ export class RateClient {
   }
 
   /**
-   * 取得即時匯率
-   * @param currency 單一幣別代碼或幣別代碼陣列，不傳入則取得所有幣別
-   * @returns Promise<RateData[]> 或 Promise<RateData | null> (單一幣別時)
+   * Get real-time exchange rates
+   * @param currency Single currency code or array of currency codes, if not provided, get all currencies
+   * @returns Promise<RateData[]> or Promise<RateData | null> (for single currency)
    */
   async getCurrentRates(currency?: string | string[]): Promise<RateData[] | RateData | null> {
     const csvData = await this.httpClient.fetchCurrentRates();
@@ -38,10 +38,10 @@ export class RateClient {
   }
 
   /**
-   * 取得歷史匯率
-   * @param currency 幣別代碼
-   * @param startDate 起始日期 (YYYY-MM-DD)
-   * @param endDate 結束日期 (YYYY-MM-DD)
+   * Get historical exchange rates
+   * @param currency Currency code
+   * @param startDate Start date (YYYY-MM-DD)
+   * @param endDate End date (YYYY-MM-DD)
    * @returns Promise<HistoricalRateData[]>
    */
   async getHistoricalRates(
@@ -49,7 +49,7 @@ export class RateClient {
     startDate: string,
     endDate: string
   ): Promise<HistoricalRateData[]> {
-    // 驗證日期格式
+    // Validate date format
     if (!validateDateFormat(startDate) || !validateDateFormat(endDate)) {
       throw new Error('Invalid date format. Expected YYYY-MM-DD');
     }
@@ -64,7 +64,7 @@ export class RateClient {
         const monthRates = this.parser.parseHistoricalRates(csvData);
         allHistoricalRates.push(...monthRates);
       } catch (error) {
-        // 歷史匯率 API 遇到 429 錯誤時重試
+        // Historical rate API retries on 429 errors
         if (error instanceof RateApiError && error.statusCode === 429) {
           const retryData = await this.retryWithBackoff(() => 
             this.httpClient.fetchHistoricalRates(normalizedCurrency, yearMonth)
@@ -81,9 +81,9 @@ export class RateClient {
   }
 
   /**
-   * 合併預設配置
-   * @param config 使用者配置
-   * @returns 完整的配置
+   * Merge default configuration
+   * @param config User configuration
+   * @returns Complete configuration
    */
   private mergeDefaultConfig(config: RateClientConfig): Required<RateClientConfig> {
     return {
@@ -97,9 +97,9 @@ export class RateClient {
   }
 
   /**
-   * 指數退避重試機制
-   * @param operation 要重試的操作
-   * @returns 操作結果
+   * Exponential backoff retry mechanism
+   * @param operation Operation to retry
+   * @returns Operation result
    */
   private async retryWithBackoff<T>(operation: () => Promise<T>): Promise<T> {
     let lastError: Error | null = null;
@@ -120,19 +120,19 @@ export class RateClient {
   }
 
   /**
-   * 延遲執行
-   * @param ms 延遲毫秒數
+   * Delay execution
+   * @param ms Delay milliseconds
    */
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
-   * 過濾指定日期範圍內的歷史匯率資料
-   * @param rates 歷史匯率資料陣列
-   * @param startDate 起始日期
-   * @param endDate 結束日期
-   * @returns 過濾後的歷史匯率資料
+   * Filter historical exchange rate data within specified date range
+   * @param rates Historical exchange rate data array
+   * @param startDate Start date
+   * @param endDate End date
+   * @returns Filtered historical exchange rate data
    */
   private filterRatesByDateRange(
     rates: HistoricalRateData[], 

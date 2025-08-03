@@ -1,34 +1,34 @@
-// 匯率類型
+// Exchange rate types
 export type RateType = 'cash' | 'spot';
 
-// 交易方向
+// Trade direction
 export type TradeDirection = 'buy' | 'sell';
 
-// 單一匯率資料
+// Single exchange rate data
 export interface RateData {
-  currency: string;           // 幣別代碼 (USD, HKD, etc.)
-  cashBuy: number;           // 現金買入
-  cashSell: number;          // 現金賣出
-  spotBuy: number;           // 即期買入
-  spotSell: number;          // 即期賣出
-  timestamp: Date;           // 匯率時間戳
+  currency: string;           // Currency code (USD, HKD, etc.)
+  cashBuy: number;           // Cash buy rate
+  cashSell: number;          // Cash sell rate
+  spotBuy: number;           // Spot buy rate
+  spotSell: number;          // Spot sell rate
+  timestamp: Date;           // Exchange rate timestamp
 }
 
-// 歷史匯率資料
+// Historical exchange rate data
 export interface HistoricalRateData extends RateData {
-  date: string;              // 日期 (YYYY-MM-DD)
+  date: string;              // Date (YYYY-MM-DD)
 }
 
-// 客戶端配置
+// Client configuration
 export interface RateClientConfig {
-  baseUrl?: string;          // API 基礎 URL
-  timeout?: number;          // 請求超時時間 (ms)
-  retryAttempts?: number;    // 歷史匯率重試次數
-  retryDelay?: number;       // 重試延遲 (ms)
-  userAgent?: string;        // 自訂 User-Agent
+  baseUrl?: string;          // API base URL
+  timeout?: number;          // Request timeout (ms)
+  retryAttempts?: number;    // Historical rate retry attempts
+  retryDelay?: number;       // Retry delay (ms)
+  userAgent?: string;        // Custom User-Agent
 }
 
-// API 錯誤類型
+// API error type
 export class RateApiError extends Error {
   constructor(
     message: string,
@@ -40,7 +40,7 @@ export class RateApiError extends Error {
   }
 }
 
-// 支援的幣別
+// Supported currencies
 export const SUPPORTED_CURRENCIES = [
   'USD', 'HKD', 'GBP', 'AUD', 'CAD', 'SGD', 'CHF', 'JPY', 'SEK', 'NZD',
   'THB', 'PHP', 'IDR', 'EUR', 'KRW', 'VND', 'MYR', 'CNY'

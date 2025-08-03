@@ -8,30 +8,30 @@ export class HttpClient {
   }
 
   /**
-   * 取得即時匯率資料
-   * @returns CSV 格式的匯率資料
+   * Get real-time exchange rate data
+   * @returns CSV format exchange rate data
    */
   async fetchCurrentRates(): Promise<string> {
     const url = `${this.config.baseUrl}/xrt/flcsv/0/day`;
-    return this.makeRequest(url, false); // 即時匯率不重試
+    return this.makeRequest(url, false); // Real-time rates don't retry
   }
 
   /**
-   * 取得歷史匯率資料
-   * @param currency 幣別代碼
-   * @param yearMonth 年月格式 (YYYY-MM)
-   * @returns CSV 格式的歷史匯率資料
+   * Get historical exchange rate data
+   * @param currency Currency code
+   * @param yearMonth Year-month format (YYYY-MM)
+   * @returns CSV format historical exchange rate data
    */
   async fetchHistoricalRates(currency: string, yearMonth: string): Promise<string> {
     const url = `${this.config.baseUrl}/xrt/flcsv/0/${yearMonth}/${currency}`;
-    return this.makeRequest(url, true); // 歷史匯率重試
+    return this.makeRequest(url, true); // Historical rates retry
   }
 
   /**
-   * 執行 HTTP 請求
-   * @param url 請求 URL
-   * @param shouldRetry 是否重試
-   * @returns 回應內容
+   * Execute HTTP request
+   * @param url Request URL
+   * @param shouldRetry Whether to retry
+   * @returns Response content
    */
   private async makeRequest(url: string, shouldRetry: boolean): Promise<string> {
     let lastError: Error | null = null;
@@ -52,9 +52,9 @@ export class HttpClient {
           if (response.status === 429) {
             const error = new RateApiError('Too many requests', 429);
             if (!shouldRetry) {
-              throw error; // 即時匯率不重試，直接拋出錯誤
+              throw error; // Real-time rates don't retry, throw error directly
             }
-            throw error; // 歷史匯率會重試
+            throw error; // Historical rates will retry
           }
           throw new RateApiError(`HTTP ${response.status}`, response.status);
         }
@@ -73,8 +73,8 @@ export class HttpClient {
   }
 
   /**
-   * 延遲執行
-   * @param ms 延遲毫秒數
+   * Delay execution
+   * @param ms Delay milliseconds
    */
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));

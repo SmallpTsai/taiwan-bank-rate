@@ -4,16 +4,16 @@ import { isValidCurrencyFormat } from '../utils/currency-utils';
 
 export class CsvParser {
   /**
-   * 解析即時匯率 CSV 資料
-   * @param csvData CSV 字串
-   * @returns 匯率資料陣列
+   * Parse real-time exchange rate CSV data
+   * @param csvData CSV string
+   * @returns Exchange rate data array
    */
   parseCurrentRates(csvData: string): RateData[] {
     const lines = this.parseCSV(csvData);
     const rates: RateData[] = [];
 
     for (const line of lines) {
-      if (line.length < 21) continue; // 跳過標題行或無效行 (即時匯率有21個欄位)
+      if (line.length < 21) continue; // Skip header rows or invalid rows (real-time rates have 21 fields)
       
       const currency = line[0];
       if (!currency || !this.isValidCurrency(currency)) continue;
@@ -28,16 +28,16 @@ export class CsvParser {
   }
 
   /**
-   * 解析歷史匯率 CSV 資料
-   * @param csvData CSV 字串
-   * @returns 歷史匯率資料陣列
+   * Parse historical exchange rate CSV data
+   * @param csvData CSV string
+   * @returns Historical exchange rate data array
    */
   parseHistoricalRates(csvData: string): HistoricalRateData[] {
     const lines = this.parseCSV(csvData);
     const rates: HistoricalRateData[] = [];
 
     for (const line of lines) {
-      if (line.length < 22) continue; // 歷史資料有22個欄位 (多一個日期欄位)
+      if (line.length < 22) continue; // Historical data has 22 fields (one more date field)
       
       const date = line[0];
       const currency = line[1];
@@ -54,9 +54,9 @@ export class CsvParser {
   }
 
   /**
-   * 解析單一匯率資料行
-   * @param line CSV 行資料
-   * @returns 匯率資料或 null
+   * Parse single exchange rate data row
+   * @param line CSV row data
+   * @returns Exchange rate data or null
    */
   private parseRateLine(line: string[]): RateData | null {
     try {
@@ -72,10 +72,10 @@ export class CsvParser {
 
       return {
         currency,
-        cashBuy: parseFloat(cashBuyStr),    // 現金買入
-        cashSell: parseFloat(cashSellStr),  // 現金賣出
-        spotBuy: parseFloat(spotBuyStr),    // 即期買入
-        spotSell: parseFloat(spotSellStr),  // 即期賣出
+        cashBuy: parseFloat(cashBuyStr),    // Cash buy rate
+        cashSell: parseFloat(cashSellStr),  // Cash sell rate
+        spotBuy: parseFloat(spotBuyStr),    // Spot buy rate
+        spotSell: parseFloat(spotSellStr),  // Spot sell rate
         timestamp: new Date(),
       };
     } catch (error) {
@@ -84,9 +84,9 @@ export class CsvParser {
   }
 
   /**
-   * 解析歷史匯率資料行
-   * @param line CSV 行資料
-   * @returns 歷史匯率資料或 null
+   * Parse historical exchange rate data row
+   * @param line CSV row data
+   * @returns Historical exchange rate data or null
    */
   private parseHistoricalRateLine(line: string[]): HistoricalRateData | null {
     try {
@@ -103,12 +103,12 @@ export class CsvParser {
 
       return {
         currency,
-        cashBuy: parseFloat(cashBuyStr),    // 現金買入
-        cashSell: parseFloat(cashSellStr),  // 現金賣出
-        spotBuy: parseFloat(spotBuyStr),    // 即期買入
-        spotSell: parseFloat(spotSellStr),  // 即期賣出
+        cashBuy: parseFloat(cashBuyStr),    // Cash buy rate
+        cashSell: parseFloat(cashSellStr),  // Cash sell rate
+        spotBuy: parseFloat(spotBuyStr),    // Spot buy rate
+        spotSell: parseFloat(spotSellStr),  // Spot sell rate
         timestamp: new Date(),
-        date: formatDateFromYYYYMMDD(date), // 日期
+        date: formatDateFromYYYYMMDD(date), // Date
       };
     } catch (error) {
       return null;
@@ -116,9 +116,9 @@ export class CsvParser {
   }
 
   /**
-   * 解析 CSV 字串為二維陣列
-   * @param csvData CSV 字串
-   * @returns 二維陣列
+   * Parse CSV string to 2D array
+   * @param csvData CSV string
+   * @returns 2D array
    */
   private parseCSV(csvData: string): string[][] {
     return csvData
@@ -128,18 +128,18 @@ export class CsvParser {
   }
 
   /**
-   * 驗證幣別格式
-   * @param currency 幣別代碼
-   * @returns 是否為有效幣別
+   * Validate currency format
+   * @param currency Currency code
+   * @returns Whether it's a valid currency
    */
   private isValidCurrency(currency: string): boolean {
     return isValidCurrencyFormat(currency);
   }
 
   /**
-   * 驗證日期格式 (YYYYMMDD)
-   * @param date 日期字串
-   * @returns 是否為有效日期格式
+   * Validate date format (YYYYMMDD)
+   * @param date Date string
+   * @returns Whether it's a valid date format
    */
   private isValidDate(date: string): boolean {
     return /^\d{8}$/.test(date);

@@ -1,180 +1,180 @@
-# 台灣銀行匯率查詢 Library
+# Taiwan Bank Exchange Rate Library
 
-一個 Node.js TypeScript library，提供台灣銀行匯率查詢功能，讓開發者能夠輕鬆取得美元和其他幣別的即時和歷史匯率資料。
+A Node.js TypeScript library that provides Taiwan Bank exchange rate query functionality, allowing developers to easily obtain real-time and historical exchange rate data for USD and other currencies.
 
-## 功能特色
+## Features
 
-- ✅ **即時匯率查詢** - 取得單一或多個幣別的當日最新匯率
-- ✅ **歷史匯率查詢** - 查詢特定幣別在指定時間範圍內的歷史匯率
-- ✅ **型別安全** - 完整的 TypeScript 支援
-- ✅ **錯誤處理** - 清晰的錯誤訊息和處理機制
-- ✅ **重試機制** - 智慧的重試策略，針對不同 API 採用不同策略
-- ✅ **無侵入性** - 不預設任何日誌輸出，由使用者控制
+- ✅ **Real-time Exchange Rate Queries** - Get the latest exchange rates for single or multiple currencies
+- ✅ **Historical Exchange Rate Queries** - Query historical exchange rates for specific currencies within a specified time range
+- ✅ **Type Safety** - Complete TypeScript support
+- ✅ **Error Handling** - Clear error messages and handling mechanisms
+- ✅ **Retry Mechanism** - Intelligent retry strategies for different APIs
+- ✅ **Non-intrusive** - No default logging output, controlled by the user
 
-## 安裝
+## Installation
 
 ```bash
 npm install taiwan-bank-rate
 ```
 
-## 快速開始
+## Quick Start
 
-### 基本使用
+### Basic Usage
 
 ```typescript
 import { RateClient } from 'taiwan-bank-rate';
 
 const client = new RateClient();
 
-// 取得所有幣別的即時匯率
+// Get real-time exchange rates for all currencies
 const allRates = await client.getCurrentRates();
 
-// 取得單一幣別即時匯率
+// Get real-time exchange rate for a single currency
 const usdRate = await client.getCurrentRates('USD');
 
-// 取得多個幣別即時匯率
+// Get real-time exchange rates for multiple currencies
 const rates = await client.getCurrentRates(['USD', 'HKD', 'JPY']);
 
-// 取得歷史匯率 (指定時間範圍)
+// Get historical exchange rates (specified time range)
 const history = await client.getHistoricalRates('USD', '2025-01-01', '2025-01-31');
 ```
 
-### 配置選項
+### Configuration Options
 
 ```typescript
 import { RateClient } from 'taiwan-bank-rate';
 
 const client = new RateClient({
-  baseUrl: 'https://rate.bot.com.tw',     // API 基礎 URL
-  timeout: 10000,                         // 請求超時時間 (ms)
-  retryAttempts: 3,                       // 歷史匯率重試次數
-  retryDelay: 1000,                       // 重試延遲 (ms)
-  userAgent: 'my-app/1.0.0',             // 自訂 User-Agent
+  baseUrl: 'https://rate.bot.com.tw',     // API base URL
+  timeout: 10000,                         // Request timeout (ms)
+  retryAttempts: 3,                       // Historical rate retry attempts
+  retryDelay: 1000,                       // Retry delay (ms)
+  userAgent: 'my-app/1.0.0',             // Custom User-Agent
 });
 ```
 
-## API 參考
+## API Reference
 
 ### RateClient
 
-主要的客戶端類別，提供匯率查詢功能。
+The main client class that provides exchange rate query functionality.
 
-#### 建構函數
+#### Constructor
 
 ```typescript
 new RateClient(config?: RateClientConfig)
 ```
 
-#### 方法
+#### Methods
 
 ##### getCurrentRates(currency?)
 
-取得即時匯率資料。
+Get real-time exchange rate data.
 
-**參數：**
-- `currency?` (string | string[]) - 可選的幣別代碼或幣別代碼陣列
+**Parameters:**
+- `currency?` (string | string[]) - Optional currency code or array of currency codes
 
-**回傳值：**
-- 無參數：`Promise<RateData[]>` - 所有幣別的匯率資料
-- 單一幣別：`Promise<RateData | null>` - 指定幣別的匯率資料
-- 多個幣別：`Promise<RateData[]>` - 指定幣別的匯率資料陣列
+**Returns:**
+- No parameters: `Promise<RateData[]>` - Exchange rate data for all currencies
+- Single currency: `Promise<RateData | null>` - Exchange rate data for the specified currency
+- Multiple currencies: `Promise<RateData[]>` - Array of exchange rate data for specified currencies
 
-**範例：**
+**Examples:**
 ```typescript
-// 取得所有幣別
+// Get all currencies
 const allRates = await client.getCurrentRates();
 
-// 取得單一幣別
+// Get single currency
 const usdRate = await client.getCurrentRates('USD');
 
-// 取得多個幣別
+// Get multiple currencies
 const rates = await client.getCurrentRates(['USD', 'HKD', 'JPY']);
 ```
 
 ##### getHistoricalRates(currency, startDate, endDate)
 
-取得歷史匯率資料。
+Get historical exchange rate data.
 
-**參數：**
-- `currency` (string) - 幣別代碼
-- `startDate` (string) - 起始日期 (YYYY-MM-DD 格式)
-- `endDate` (string) - 結束日期 (YYYY-MM-DD 格式)
+**Parameters:**
+- `currency` (string) - Currency code
+- `startDate` (string) - Start date (YYYY-MM-DD format)
+- `endDate` (string) - End date (YYYY-MM-DD format)
 
-**回傳值：**
-- `Promise<HistoricalRateData[]>` - 歷史匯率資料陣列
+**Returns:**
+- `Promise<HistoricalRateData[]>` - Array of historical exchange rate data
 
-**範例：**
+**Example:**
 ```typescript
 const history = await client.getHistoricalRates('USD', '2025-01-01', '2025-01-31');
 ```
 
-### 資料型別
+### Data Types
 
 #### RateData
 
-即時匯率資料結構。
+Real-time exchange rate data structure.
 
 ```typescript
 interface RateData {
-  currency: string;           // 幣別代碼 (USD, HKD, etc.)
-  cashBuy: number;           // 現金買入
-  cashSell: number;          // 現金賣出
-  spotBuy: number;           // 即期買入
-  spotSell: number;          // 即期賣出
-  timestamp: Date;           // 匯率時間戳
+  currency: string;           // Currency code (USD, HKD, etc.)
+  cashBuy: number;           // Cash buy rate
+  cashSell: number;          // Cash sell rate
+  spotBuy: number;           // Spot buy rate
+  spotSell: number;          // Spot sell rate
+  timestamp: Date;           // Exchange rate timestamp
 }
 ```
 
 #### HistoricalRateData
 
-歷史匯率資料結構。
+Historical exchange rate data structure.
 
 ```typescript
 interface HistoricalRateData extends RateData {
-  date: string;              // 日期 (YYYY-MM-DD)
+  date: string;              // Date (YYYY-MM-DD)
 }
 ```
 
 #### RateClientConfig
 
-客戶端配置選項。
+Client configuration options.
 
 ```typescript
 interface RateClientConfig {
-  baseUrl?: string;          // API 基礎 URL
-  timeout?: number;          // 請求超時時間 (ms)
-  retryAttempts?: number;    // 歷史匯率重試次數
-  retryDelay?: number;       // 重試延遲 (ms)
-  userAgent?: string;        // 自訂 User-Agent
+  baseUrl?: string;          // API base URL
+  timeout?: number;          // Request timeout (ms)
+  retryAttempts?: number;    // Historical rate retry attempts
+  retryDelay?: number;       // Retry delay (ms)
+  userAgent?: string;        // Custom User-Agent
 }
 ```
 
-## 支援的幣別
+## Supported Currencies
 
-- USD (美元)
-- HKD (港幣)
-- GBP (英鎊)
-- AUD (澳幣)
-- CAD (加幣)
-- SGD (新加坡幣)
-- CHF (瑞士法郎)
-- JPY (日圓)
-- SEK (瑞典克朗)
-- NZD (紐西蘭幣)
-- THB (泰銖)
-- PHP (菲律賓披索)
-- IDR (印尼盾)
-- EUR (歐元)
-- KRW (韓元)
-- VND (越南盾)
-- MYR (馬來西亞幣)
-- CNY (人民幣)
+- USD (US Dollar)
+- HKD (Hong Kong Dollar)
+- GBP (British Pound)
+- AUD (Australian Dollar)
+- CAD (Canadian Dollar)
+- SGD (Singapore Dollar)
+- CHF (Swiss Franc)
+- JPY (Japanese Yen)
+- SEK (Swedish Krona)
+- NZD (New Zealand Dollar)
+- THB (Thai Baht)
+- PHP (Philippine Peso)
+- IDR (Indonesian Rupiah)
+- EUR (Euro)
+- KRW (Korean Won)
+- VND (Vietnamese Dong)
+- MYR (Malaysian Ringgit)
+- CNY (Chinese Yuan)
 
-## 錯誤處理
+## Error Handling
 
 ### RateApiError
 
-API 相關錯誤類別。
+API-related error class.
 
 ```typescript
 class RateApiError extends Error {
@@ -186,7 +186,7 @@ class RateApiError extends Error {
 }
 ```
 
-### 錯誤處理範例
+### Error Handling Example
 
 ```typescript
 try {
@@ -195,68 +195,68 @@ try {
 } catch (error) {
   if (error instanceof RateApiError) {
     if (error.statusCode === 429) {
-      console.log('請求過於頻繁，請稍後再試');
+      console.log('Too many requests, please try again later');
     } else {
-      console.log(`API 錯誤: ${error.message}`);
+      console.log(`API Error: ${error.message}`);
     }
   } else {
-    console.log(`其他錯誤: ${error.message}`);
+    console.log(`Other Error: ${error.message}`);
   }
 }
 ```
 
-## 重試策略
+## Retry Strategy
 
-- **即時匯率 API**：遇到 429 錯誤時不重試，直接拋出錯誤
-- **歷史匯率 API**：遇到 429 錯誤時使用指數退避重試機制
+- **Real-time Rate API**: No retry on 429 errors, throws error directly
+- **Historical Rate API**: Uses exponential backoff retry mechanism on 429 errors
 
-## 開發
+## Development
 
-### 安裝依賴
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 建置
+### Build
 
 ```bash
 npm run build
 ```
 
-### 測試
+### Test
 
 ```bash
 npm test
 ```
 
-### 程式碼檢查
+### Lint
 
 ```bash
 npm run lint
 npm run lint:fix
 ```
 
-### 格式化
+### Format
 
 ```bash
 npm run format
 ```
 
-## 授權
+## License
 
 MIT License
 
-## 貢獻
+## Contributing
 
-歡迎提交 Issue 和 Pull Request！
+Issues and Pull Requests are welcome!
 
-## 更新日誌
+## Changelog
 
 ### 1.0.0
 
-- 初始版本
-- 支援即時匯率查詢
-- 支援歷史匯率查詢
-- 完整的 TypeScript 支援
-- 錯誤處理和重試機制 
+- Initial release
+- Support for real-time exchange rate queries
+- Support for historical exchange rate queries
+- Complete TypeScript support
+- Error handling and retry mechanisms 

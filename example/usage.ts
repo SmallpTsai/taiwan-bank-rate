@@ -1,97 +1,97 @@
 import { RateClient, RateApiError } from '../src';
 
 async function main() {
-  console.log('=== 台灣銀行匯率查詢 Library 使用範例 ===\n');
+  console.log('=== Taiwan Bank Exchange Rate Library Usage Example ===\n');
 
-  // 建立客戶端實例
+  // Create client instance
   const client = new RateClient({
-    timeout: 15000, // 增加超時時間以確保有足夠時間取得資料
+    timeout: 15000, // Increase timeout to ensure enough time to retrieve data
     retryAttempts: 3,
     retryDelay: 2000,
   });
 
   try {
-    // 1. 取得所有幣別的即時匯率
-    console.log('1. 取得所有幣別的即時匯率...');
+    // 1. Get real-time exchange rates for all currencies
+    console.log('1. Getting real-time exchange rates for all currencies...');
     const allRates = await client.getCurrentRates();
     if (allRates && Array.isArray(allRates)) {
-      console.log(`成功取得 ${allRates.length} 個幣別的匯率資料`);
+      console.log(`Successfully retrieved exchange rate data for ${allRates.length} currencies`);
       
-      // 顯示前 5 個幣別的資料
+      // Display first 5 currencies
       allRates.slice(0, 5).forEach(rate => {
-        console.log(`  ${rate.currency}: 現金買入 ${rate.cashBuy}, 現金賣出 ${rate.cashSell}, 即期買入 ${rate.spotBuy}, 即期賣出 ${rate.spotSell}`);
+        console.log(`  ${rate.currency}: Cash Buy ${rate.cashBuy}, Cash Sell ${rate.cashSell}, Spot Buy ${rate.spotBuy}, Spot Sell ${rate.spotSell}`);
       });
     } else {
-      console.log('未取得匯率資料');
+      console.log('No exchange rate data retrieved');
     }
     console.log('');
 
-    // 2. 取得單一幣別 (USD) 的即時匯率
-    console.log('2. 取得 USD 的即時匯率...');
+    // 2. Get real-time exchange rate for single currency (USD)
+    console.log('2. Getting USD real-time exchange rate...');
     const usdRate = await client.getCurrentRates('USD');
     if (usdRate && !Array.isArray(usdRate)) {
-      console.log(`  USD 匯率: 現金買入 ${usdRate.cashBuy}, 現金賣出 ${usdRate.cashSell}, 即期買入 ${usdRate.spotBuy}, 即期賣出 ${usdRate.spotSell}`);
+      console.log(`  USD Rate: Cash Buy ${usdRate.cashBuy}, Cash Sell ${usdRate.cashSell}, Spot Buy ${usdRate.spotBuy}, Spot Sell ${usdRate.spotSell}`);
     } else {
-      console.log('  未找到 USD 匯率資料');
+      console.log('  USD exchange rate data not found');
     }
     console.log('');
 
-    // 3. 取得多個幣別的即時匯率
-    console.log('3. 取得多個幣別的即時匯率...');
+    // 3. Get real-time exchange rates for multiple currencies
+    console.log('3. Getting real-time exchange rates for multiple currencies...');
     const multiRates = await client.getCurrentRates(['USD', 'HKD', 'JPY', 'EUR']);
     if (multiRates && Array.isArray(multiRates)) {
-      console.log(`成功取得 ${multiRates.length} 個幣別的匯率資料`);
+      console.log(`Successfully retrieved exchange rate data for ${multiRates.length} currencies`);
       multiRates.forEach(rate => {
-        console.log(`  ${rate.currency}: 現金買入 ${rate.cashBuy}, 現金賣出 ${rate.cashSell}, 即期買入 ${rate.spotBuy}, 即期賣出 ${rate.spotSell}`);
+        console.log(`  ${rate.currency}: Cash Buy ${rate.cashBuy}, Cash Sell ${rate.cashSell}, Spot Buy ${rate.spotBuy}, Spot Sell ${rate.spotSell}`);
       });
     } else {
-      console.log('未取得多幣別匯率資料');
+      console.log('No multi-currency exchange rate data retrieved');
     }
     console.log('');
 
-    // 4. 取得歷史匯率 (最近一個月的 USD 匯率)
-    console.log('4. 取得 USD 的歷史匯率 (最近一個月)...');
+    // 4. Get historical exchange rates (USD rates for the last month)
+    console.log('4. Getting USD historical exchange rates (last month)...');
     const today = new Date();
     const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
     
     const startDate = oneMonthAgo.toISOString().split('T')[0]; // YYYY-MM-DD
     const endDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
     
-    console.log(`  查詢期間: ${startDate} 到 ${endDate}`);
+    console.log(`  Query period: ${startDate} to ${endDate}`);
     
     const historicalRates = await client.getHistoricalRates('USD', startDate!, endDate!);
-    console.log(`成功取得 ${historicalRates.length} 筆歷史匯率資料`);
+    console.log(`Successfully retrieved ${historicalRates.length} historical exchange rate records`);
     
-    // 顯示前 5 筆歷史資料
+    // Display first 5 historical records
     historicalRates.slice(0, 5).forEach(rate => {
-      console.log(`  ${rate.date}: 現金買入 ${rate.cashBuy}, 現金賣出 ${rate.cashSell}, 即期買入 ${rate.spotBuy}, 即期賣出 ${rate.spotSell}`);
+      console.log(`  ${rate.date}: Cash Buy ${rate.cashBuy}, Cash Sell ${rate.cashSell}, Spot Buy ${rate.spotBuy}, Spot Sell ${rate.spotSell}`);
     });
     
     if (historicalRates.length > 5) {
-      console.log(`  ... 還有 ${historicalRates.length - 5} 筆資料`);
+      console.log(`  ... and ${historicalRates.length - 5} more records`);
     }
     console.log('');
 
-    // 5. 錯誤處理範例
-    console.log('5. 錯誤處理範例...');
+    // 5. Error handling example
+    console.log('5. Error handling example...');
     try {
-      // 嘗試取得不存在的幣別
+      // Try to get non-existent currency
       await client.getCurrentRates('INVALID');
-      console.log('  這行不會執行');
+      console.log('  This line will not execute');
     } catch (error) {
       if (error instanceof RateApiError) {
-        console.log(`  API 錯誤: ${error.message} (狀態碼: ${error.statusCode})`);
+        console.log(`  API Error: ${error.message} (Status Code: ${error.statusCode})`);
       } else {
-        console.log(`  其他錯誤: ${error instanceof Error ? error.message : String(error)}`);
+        console.log(`  Other Error: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     console.log('');
 
-    // 6. 效能統計
-    console.log('6. 效能統計...');
+    // 6. Performance statistics
+    console.log('6. Performance statistics...');
     const startTime = Date.now();
     
-    // 並行取得多個幣別的匯率
+    // Get exchange rates for multiple currencies in parallel
     const currencies = ['USD', 'HKD', 'JPY', 'EUR', 'GBP'];
     const promises = currencies.map(async (currency) => {
       const rate = await client.getCurrentRates(currency);
@@ -101,30 +101,30 @@ async function main() {
     const results = await Promise.all(promises);
     const endTime = Date.now();
     
-    console.log(`  並行取得 ${currencies.length} 個幣別匯率，耗時 ${endTime - startTime}ms`);
+    console.log(`  Retrieved ${currencies.length} currency exchange rates in parallel, took ${endTime - startTime}ms`);
     results.forEach(({ currency, rate }) => {
       if (rate && !Array.isArray(rate)) {
-        console.log(`    ${currency}: 現金買入 ${rate.cashBuy}, 現金賣出 ${rate.cashSell}`);
+        console.log(`    ${currency}: Cash Buy ${rate.cashBuy}, Cash Sell ${rate.cashSell}`);
       }
     });
 
   } catch (error) {
-    console.error('執行範例時發生錯誤:');
+    console.error('Error occurred while running example:');
     if (error instanceof RateApiError) {
-      console.error(`  API 錯誤: ${error.message}`);
-      console.error(`  狀態碼: ${error.statusCode}`);
+      console.error(`  API Error: ${error.message}`);
+      console.error(`  Status Code: ${error.statusCode}`);
       if (error.response) {
-        console.error(`  回應內容: ${error.response.substring(0, 200)}...`);
+        console.error(`  Response: ${error.response.substring(0, 200)}...`);
       }
     } else {
-      console.error(`  其他錯誤: ${error instanceof Error ? error.message : String(error)}`);
+      console.error(`  Other Error: ${error instanceof Error ? error.message : String(error)}`);
     }
     process.exit(1);
   }
 }
 
-// 執行範例
+// Run example
 main().catch(error => {
-  console.error('範例執行失敗:', error);
+  console.error('Example execution failed:', error);
   process.exit(1);
 }); 

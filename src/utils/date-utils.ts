@@ -1,16 +1,16 @@
 /**
- * 格式化日期為 YYYY-MM 格式
- * @param date 日期物件
- * @returns YYYY-MM 格式的字串
+ * Format date to YYYY-MM format
+ * @param date Date object
+ * @returns YYYY-MM format string
  */
 export function formatYearMonth(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }
 
 /**
- * 驗證 YYYY-MM 格式的日期字串
- * @param yearMonth YYYY-MM 格式的字串
- * @returns 是否為有效格式
+ * Validate YYYY-MM format date string
+ * @param yearMonth YYYY-MM format string
+ * @returns Whether it's a valid format
  */
 export function validateYearMonth(yearMonth: string): boolean {
   if (!/^\d{4}-\d{2}$/.test(yearMonth)) {
@@ -28,10 +28,10 @@ export function validateYearMonth(yearMonth: string): boolean {
 }
 
 /**
- * 生成日期範圍內的月份列表
- * @param startDate 起始日期 (YYYY-MM-DD)
- * @param endDate 結束日期 (YYYY-MM-DD)
- * @returns YYYY-MM 格式的月份陣列
+ * Generate month list within date range
+ * @param startDate Start date (YYYY-MM-DD)
+ * @param endDate End date (YYYY-MM-DD)
+ * @returns Array of YYYY-MM format months
  */
 export function generateDateRange(startDate: string, endDate: string): string[] {
   const start = new Date(startDate);
@@ -49,9 +49,9 @@ export function generateDateRange(startDate: string, endDate: string): string[] 
 }
 
 /**
- * 驗證 YYYY-MM-DD 格式的日期字串
- * @param date YYYY-MM-DD 格式的字串
- * @returns 是否為有效格式
+ * Validate YYYY-MM-DD format date string
+ * @param date YYYY-MM-DD format string
+ * @returns Whether it's a valid format
  */
 export function validateDateFormat(date: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -72,9 +72,9 @@ export function validateDateFormat(date: string): boolean {
 }
 
 /**
- * 將 YYYYMMDD 格式轉換為 YYYY-MM-DD 格式
- * @param dateStr YYYYMMDD 格式的字串
- * @returns YYYY-MM-DD 格式的字串
+ * Convert YYYYMMDD format to YYYY-MM-DD format
+ * @param dateStr YYYYMMDD format string
+ * @returns YYYY-MM-DD format string
  */
 export function formatDateFromYYYYMMDD(dateStr: string): string {
   if (!/^\d{8}$/.test(dateStr)) {
@@ -89,11 +89,11 @@ export function formatDateFromYYYYMMDD(dateStr: string): string {
 }
 
 /**
- * 過濾指定日期範圍內的歷史匯率資料
- * @param rates 歷史匯率資料陣列
- * @param startDate 起始日期 (YYYY-MM-DD)
- * @param endDate 結束日期 (YYYY-MM-DD)
- * @returns 過濾後的歷史匯率資料
+ * Filter historical exchange rate data within specified date range
+ * @param rates Historical exchange rate data array
+ * @param startDate Start date (YYYY-MM-DD)
+ * @param endDate End date (YYYY-MM-DD)
+ * @returns Filtered historical exchange rate data
  */
 export function filterRatesByDateRange(
   rates: Array<{ date: string }>, 

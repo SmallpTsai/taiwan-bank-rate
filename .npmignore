@@ -1,0 +1,12 @@
+src/
+example/
+design/
+spec/
+__tests__/
+*.test.ts
+*.spec.ts
+.eslintrc.js
+.prettierrc
+jest.config.js
+tsconfig.json
+.gitignore

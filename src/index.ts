@@ -3,6 +3,6 @@ export { CsvParser } from './parser';
 export * from './types';
 export * from './utils';
 
-// 預設匯出
+// Default export
 import { RateClient } from './client';
 export default RateClient; 
