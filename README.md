@@ -2,6 +2,14 @@
 
 A Node.js TypeScript library that provides Taiwan Bank exchange rate query functionality, allowing developers to easily obtain real-time and historical exchange rate data for USD and other currencies.
 
+## ⚠️ Important Notice
+
+**This library is NOT officially provided by Taiwan Bank.** It is a third-party library that accesses Taiwan Bank's public exchange rate data.
+
+**⚠️ Rate Limiting Warning:** Making too frequent API calls may result in your IP being blocked by Taiwan Bank's servers. Users are responsible for their own usage and should implement appropriate rate limiting in their applications.
+
+## [📖 繁體中文版本](README-tw.md)
+
 ## Features
 
 - ✅ **Real-time Exchange Rate Queries** - Get the latest exchange rates for single or multiple currencies
