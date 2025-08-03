@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+- spec folder is only for study/reference, read-only. Do not modify anything in it.
+- design folder is for high / low level design or implementation plan. Store only .md files in it.
+

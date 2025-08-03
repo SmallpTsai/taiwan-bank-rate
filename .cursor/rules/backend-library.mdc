@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+- This is a library for backend, to be re-usable by others. 
+- Configurations and logging should be controlled by library user/caller.
+- by default, library should not show any log on console.
